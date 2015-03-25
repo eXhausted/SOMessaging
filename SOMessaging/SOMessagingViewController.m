@@ -57,18 +57,19 @@
 
 - (void)setup
 {
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    if (!self.tableView) {
+        self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+        self.tableView.backgroundColor = [UIColor whiteColor];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [self.view addSubview:self.tableView];
+    }
     
     self.tableViewHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 10)];
     self.tableViewHeaderView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = self.tableViewHeaderView;
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    
-    [self.view addSubview:self.tableView];
     
     self.messageInputView = [[SOMessageInputView alloc] init];
     self.messageInputView.delegate = self;

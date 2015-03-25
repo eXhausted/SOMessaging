@@ -34,7 +34,7 @@
 @interface SOMessagingViewController : UIViewController <SOMessagingDataSource, SOMessagingDelegate, UITableViewDataSource>
 
 #pragma mark - Properties
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) SOMessageInputView *messageInputView;
 
 #pragma mark - Methods
