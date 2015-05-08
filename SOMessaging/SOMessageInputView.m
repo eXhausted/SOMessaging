@@ -39,6 +39,7 @@
 }
 
 @property (weak, nonatomic) UIView *keyboardView;
+@property (nonatomic, assign) int previousNumberOfLines;
 
 @end
 
@@ -262,17 +263,17 @@
     
     CGRect frame = self.textView.frame;
     CGFloat delta = ceilf(usedFrame.size.height) - frame.size.height;
-    
-     CGFloat lineHeight = self.textView.font.lineHeight;
-    int numberOfActualLines = (int)ceilf(usedFrame.size.height / lineHeight);
-    
+
+    CGFloat lineHeight = self.textView.font.lineHeight;
+    int numberOfActualLines = (int)floorf(usedFrame.size.height / lineHeight);
+
     CGFloat actualHeight = numberOfActualLines * lineHeight;
-    
+
     delta = actualHeight - self.textView.frame.size.height; //self.textView.font.lineHeight - 5;
     CGRect frm = self.frame;
     frm.size.height += ceilf(delta);
     frm.origin.y -= ceilf(delta);
-    
+
     if (frm.size.height < self.textMaxHeight) {
         if (frm.size.height < self.textInitialHeight) {
             frm.size.height = self.textInitialHeight;
@@ -281,17 +282,23 @@
             frm.origin.y = window.bounds.size.height - windowPoint.y - frm.size.height - keyboardFrame.size.height;
         }
         
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.3f animations:^{
             self.frame = frm;
-
         } completion:^(BOOL finished) {
-            [self scrollToCaretInTextView:self.textView animated:NO];
+            [self scrollToCaretInTextViewIfNeeded:numberOfActualLines usedFrame:usedFrame];
         }];
     } else {
-        [self scrollToCaretInTextView:self.textView animated:NO];
+        [self scrollToCaretInTextViewIfNeeded:numberOfActualLines usedFrame:usedFrame];
     }
     
     [self adjustTableViewWithCurve:NO scrollsToBottom:YES];
+}
+
+- (void)scrollToCaretInTextViewIfNeeded:(int)numberOfLines usedFrame:(CGRect)usedFrame{
+    if (self.previousNumberOfLines != numberOfLines) {
+        [self.textView scrollRectToVisible:usedFrame animated:NO];
+    }
+    self.previousNumberOfLines = numberOfLines;
 }
 
 - (void)scrollToCaretInTextView:(UITextView *)textView animated:(BOOL)animated
