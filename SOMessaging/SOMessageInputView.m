@@ -276,7 +276,9 @@
     if (frm.size.height < self.textMaxHeight) {
         if (frm.size.height < self.textInitialHeight) {
             frm.size.height = self.textInitialHeight;
-            frm.origin.y = self.superview.bounds.size.height - frm.size.height - keyboardFrame.size.height;
+            UIWindow *window = [UIApplication sharedApplication].keyWindow;
+            CGPoint windowPoint = [self.superview convertPoint:self.superview.bounds.origin toView:window];
+            frm.origin.y = window.bounds.size.height - windowPoint.y - frm.size.height - keyboardFrame.size.height;
         }
         
         [UIView animateWithDuration:0.3 animations:^{
@@ -325,7 +327,9 @@
     
     CGRect frame = self.frame;
     // calculate the absolute ending point (based on the window rather than superview, which could be contained in a tab bar or tool bar)
-    frame.origin.y = windowRect.size.height - frame.size.height - keyboardRect.size.height;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    CGPoint windowPoint = [self.superview convertPoint:self.superview.bounds.origin toView:window];
+    frame.origin.y = windowRect.size.height - windowPoint.y - frame.size.height - keyboardRect.size.height;
     initialInputViewPosYWhenKeyboardIsShown = frame.origin.y;
     
     [self adjustTableViewWithCurve:YES scrollsToBottom:YES];
