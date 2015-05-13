@@ -53,4 +53,9 @@
  */
 - (void)refreshMessages;
 
+/**
+ * Tint for message bubble
+ */
+- (UIImage *)tintImage:(UIImage *)image withColor:(UIColor *)color;
+
 @end
